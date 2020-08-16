@@ -20,7 +20,7 @@ export default function Login({ navigation }: { navigation: any }) {
         <TextInput style={estilos.acesso} placeholder="Usuário" />
         <TextInput style={estilos.acesso} secureTextEntry placeholder="Senha" />
         <TouchableOpacity style={estilos.btnLogar} onPress={logar}>
-          <Text style={estilos.txtLogar}>Logar</Text>
+          <Text style={estilos.txtLogar}>Entrar</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -116,17 +116,24 @@ const estilos = StyleSheet.create({
 });
 
 function logar() {
+  // O fetch vai fazer uma captura/busca de dados de uma API
   fetch("http://192.168.0.23/projeto-app-loja/service/usuario/login.php", {
+    // Passando dados para a API com método POST
     method: "POST",
+    // Passando cabeçalhos dizendo que ele tem que aceitar uma aplicação em JSON
+    // e o conteúdo que está sendo enviado é JSON
     headers: {
       Accept: "appllication/json",
       "Content-Type": "aplication/json",
     },
+    // O corpo que eu estou enviando para lá é no formato de JSON
     body: JSON.stringify({
       nomeusuario: "felipegalvao",
       senha: "123",
     }),
   })
+    // Então, pegue a resposta vinda da API e transfome em JSON
+    // Então, exiba a reposta no console
     .then((response) => response.json())
     .then((resposta) => {
       console.log(resposta);
