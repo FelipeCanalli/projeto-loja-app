@@ -9,7 +9,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
+let us = "";
+let sh = "";
+
 export default function Login({ navigation }: { navigation: any }) {
+  const [usuario, setUsuario] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+
   return (
     <View style={estilos.background}>
       <Image
@@ -17,9 +23,29 @@ export default function Login({ navigation }: { navigation: any }) {
         style={estilos.logo}
       />
       <View style={estilos.caixa}>
-        <TextInput style={estilos.acesso} placeholder="Usuário" />
-        <TextInput style={estilos.acesso} secureTextEntry placeholder="Senha" />
-        <TouchableOpacity style={estilos.btnLogar} onPress={logar}>
+        {/* Mandando dados para as constantes quando houver uma alteração de texto */}
+        <TextInput
+          style={estilos.acesso}
+          placeholder="Usuário"
+          onChangeText={(value) => setUsuario(value)}
+          value={usuario}
+          keyboardType="visible-password"
+        />
+        <TextInput
+          style={estilos.acesso}
+          secureTextEntry
+          placeholder="Senha"
+          onChangeText={(value) => setSenha(value)}
+          value={senha}
+        />
+        <TouchableOpacity
+          style={estilos.btnLogar}
+          onPress={() => {
+            us = usuario;
+            sh = senha;
+            logar();
+          }}
+        >
           <Text style={estilos.txtLogar}>Entrar</Text>
         </TouchableOpacity>
 
@@ -128,8 +154,8 @@ function logar() {
     },
     // O corpo que eu estou enviando para lá é no formato de JSON
     body: JSON.stringify({
-      nomeusuario: "felipegalvao",
-      senha: "123",
+      nomeusuario: us,
+      senha: sh,
     }),
   })
     // Então, pegue a resposta vinda da API e transfome em JSON

@@ -5,11 +5,40 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native-gesture-handler";
-import { Picker, StyleSheet } from "react-native";
+import { Picker, StyleSheet, Alert } from "react-native";
+
+let ft = "";
+let nome = "";
+let cpf = "";
+let sx = "";
+let us = "";
+let sh = "";
+let cf = "";
+let em = "";
+let tel = "";
+let tp = "";
+let lg = "";
+let nu = "";
+let cp = "";
+let ba = "";
+let cep = "";
 
 export default function Cadastrar() {
+  const [foto, setFoto] = React.useState("");
+  const [nomecli, setNomecli] = React.useState("");
+  const [cpfcli, setCPFcli] = React.useState("");
   const [sexo, setSexo] = React.useState("");
+  const [usuario, setUsuario] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+  const [confirmar, setConfirmar] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [telefone, setTelefone] = React.useState("");
   const [tipo, setTipo] = React.useState("");
+  const [logradouro, setLogradouro] = React.useState("");
+  const [numero, setNumero] = React.useState("");
+  const [complemento, setComplemento] = React.useState("");
+  const [bairro, setBairro] = React.useState("");
+  const [cepcli, setCEPcli] = React.useState("");
 
   return (
     <View style={estilos.background}>
@@ -17,11 +46,18 @@ export default function Cadastrar() {
         {/* ==============================  inicio da caixa ============================== */}
         <View style={estilos.caixa}>
           <Text style={estilos.titulo}>Dados Pessoais</Text>
-          <TextInput placeholder="Nome Completo" style={estilos.input} />
+          <TextInput
+            placeholder="Nome Completo"
+            style={estilos.input}
+            onChangeText={(value) => setNomecli(value)}
+            value={nomecli}
+          />
           <TextInput
             placeholder="CPF"
             keyboardType="numeric"
             style={estilos.input}
+            onChangeText={(value) => setCPFcli(value)}
+            value={cpfcli}
           />
           <Picker
             mode="dropdown"
@@ -38,16 +74,26 @@ export default function Cadastrar() {
 
         <View style={estilos.caixa}>
           <Text style={estilos.titulo}>Acesso</Text>
-          <TextInput placeholder="Usuário" style={estilos.input} />
+          <TextInput
+            placeholder="Usuário"
+            style={estilos.input}
+            onChangeText={(value) => setUsuario(value)}
+            value={usuario}
+            keyboardType="visible-password"
+          />
           <TextInput
             secureTextEntry
             placeholder="Senha"
             style={estilos.input}
+            onChangeText={(value) => setSenha(value)}
+            value={senha}
           />
           <TextInput
             secureTextEntry
             placeholder="Confirme sua senha"
             style={estilos.input}
+            onChangeText={(value) => setConfirmar(value)}
+            value={confirmar}
           />
         </View>
 
@@ -59,11 +105,15 @@ export default function Cadastrar() {
             placeholder="Email"
             keyboardType="email-address"
             style={estilos.input}
+            onChangeText={(value) => setEmail(value)}
+            value={email}
           />
           <TextInput
             placeholder="Telefone"
             keyboardType="phone-pad"
             style={estilos.input}
+            onChangeText={(value) => setTelefone(value)}
+            value={telefone}
           />
         </View>
 
@@ -82,24 +132,46 @@ export default function Cadastrar() {
             <Picker.Item label="Alameda" value="Alameda" />
             <Picker.Item label="Praça" value="Praça" />
           </Picker>
-          <TextInput placeholder="Logradouro" style={estilos.input} />
+          <TextInput
+            placeholder="Logradouro"
+            style={estilos.input}
+            onChangeText={(value) => setLogradouro(value)}
+            value={logradouro}
+          />
           <TextInput
             placeholder="Número"
             keyboardType="numeric"
             style={estilos.input}
           />
-          <TextInput placeholder="Complemento" style={estilos.input} />
+          <TextInput
+            placeholder="Complemento"
+            style={estilos.input}
+            onChangeText={(value) => setComplemento(value)}
+            value={complemento}
+          />
           <TextInput placeholder="Bairro" style={estilos.input} />
           <TextInput
             placeholder="CEP"
             keyboardType="numeric"
             style={estilos.input}
+            onChangeText={(value) => setCEPcli(value)}
+            value={cepcli}
           />
         </View>
 
         {/* ======================================================================================== */}
 
-        <TouchableOpacity style={estilos.btnCadastrar}>
+        <TouchableOpacity
+          style={estilos.btnCadastrar}
+          onPress={() => {
+            //let=const
+            ft = foto;
+            us = usuario;
+            sh = senha;
+
+            efetuarCadastro();
+          }}
+        >
           <Text style={estilos.txtCadastrar}>Cadastrar</Text>
         </TouchableOpacity>
 
@@ -163,3 +235,31 @@ const estilos = StyleSheet.create({
     fontSize: 20,
   },
 });
+
+function efetuarCadastro() {
+  // O fetch vai fazer uma captura/busca de dados de uma API
+  fetch("http://192.168.0.23/projeto-app-loja/service/usuario/cadastrar.php", {
+    // Passando dados para a API com método POST
+    method: "POST",
+    // Passando cabeçalhos dizendo que ele tem que aceitar uma aplicação em JSON
+    // e o conteúdo que está sendo enviado é JSON
+    headers: {
+      Accept: "appllication/json",
+      "Content-Type": "aplication/json",
+    },
+    // O corpo que eu estou enviando para lá é no formato de JSON
+    body: JSON.stringify({
+      foto: "padrao.jpg",
+      nomeusuario: us,
+      senha: sh,
+    }),
+  })
+    // Então, pegue a resposta vinda da API e transfome em JSON
+    // Então, exiba a reposta no console
+    .then((response) => response.json())
+    .then((resposta) => {
+      console.log(resposta);
+      Alert.alert("Olhe o console");
+    })
+    .catch((error) => console.error(error));
+}
