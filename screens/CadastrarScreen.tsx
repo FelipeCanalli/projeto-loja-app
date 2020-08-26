@@ -7,7 +7,8 @@ import {
 } from "react-native-gesture-handler";
 import { Picker, StyleSheet, Alert } from "react-native";
 
-let ft = "";
+// Váriaveis globais
+let ft = "padrao.jpg";
 let nome = "";
 let cpf = "";
 let sx = "";
@@ -142,6 +143,8 @@ export default function Cadastrar() {
             placeholder="Número"
             keyboardType="numeric"
             style={estilos.input}
+            onChangeText={(value) => setNumero(value)}
+            value={numero}
           />
           <TextInput
             placeholder="Complemento"
@@ -149,7 +152,12 @@ export default function Cadastrar() {
             onChangeText={(value) => setComplemento(value)}
             value={complemento}
           />
-          <TextInput placeholder="Bairro" style={estilos.input} />
+          <TextInput
+            placeholder="Bairro"
+            style={estilos.input}
+            onChangeText={(value) => setBairro(value)}
+            value={bairro}
+          />
           <TextInput
             placeholder="CEP"
             keyboardType="numeric"
@@ -164,10 +172,21 @@ export default function Cadastrar() {
         <TouchableOpacity
           style={estilos.btnCadastrar}
           onPress={() => {
-            //let=const
+            // let = const;
             ft = foto;
             us = usuario;
             sh = senha;
+            nome = nomecli;
+            cpf = cpfcli;
+            sx = sexo;
+            em = email;
+            tel = telefone;
+            tp = tipo;
+            lg = logradouro;
+            nu = numero;
+            cp = complemento;
+            ba = bairro;
+            cep = cepcli;
 
             efetuarCadastro();
           }}
@@ -191,8 +210,8 @@ const estilos = StyleSheet.create({
     borderColor: "silver",
     borderWidth: 1,
     borderRadius: 10,
-    margin: 20,
-    padding: 10,
+    margin: 30,
+    padding: 20,
   },
   titulo: {
     marginHorizontal: 22,
@@ -238,7 +257,7 @@ const estilos = StyleSheet.create({
 
 function efetuarCadastro() {
   // O fetch vai fazer uma captura/busca de dados de uma API
-  fetch("http://192.168.0.23/projeto-app-loja/service/usuario/cadastrar.php", {
+  fetch("http://192.168.0.23/projeto-app-loja/service/cadastro/cadastrar.php", {
     // Passando dados para a API com método POST
     method: "POST",
     // Passando cabeçalhos dizendo que ele tem que aceitar uma aplicação em JSON
@@ -249,9 +268,21 @@ function efetuarCadastro() {
     },
     // O corpo que eu estou enviando para lá é no formato de JSON
     body: JSON.stringify({
-      foto: "padrao.jpg",
+      // dados da api : let,
+      nomecli: nome,
+      cpf: cpf,
+      sexo: sx,
+      email: em,
+      telefone: tel,
+      tipo: tp,
+      logradouro: lg,
+      numero: nu,
+      complemento: cp,
+      bairro: ba,
+      cep: cep,
       nomeusuario: us,
       senha: sh,
+      foto: ft,
     }),
   })
     // Então, pegue a resposta vinda da API e transfome em JSON
