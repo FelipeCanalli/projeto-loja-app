@@ -2,6 +2,7 @@ import * as React from "react";
 import { Text, View } from "../components/Themed";
 import { Image, StyleSheet, ActivityIndicator } from "react-native";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
+import NumberFormat from "react-number-format"; // npm i react-number-format
 
 export default function Inicial() {
   const [carregado, setCarregado] = React.useState(true);
@@ -28,7 +29,7 @@ export default function Inicial() {
       <ScrollView>
         <Image
           source={require("../assets/images/produtos.png")}
-          style={estilos.imagem}
+          style={tela.img}
         />
         {carregado ? (
           <ActivityIndicator />
@@ -37,10 +38,20 @@ export default function Inicial() {
             data={dados}
             renderItem={({ item }) => (
               <View>
-                <Image source={require("../assets/images/mousepad1.png")} />
-                <Text>
-                  {item.nomeproduto} | {item.preco}
-                </Text>
+                <Image
+                  source={{
+                    uri: `http://192.168.0.23/projeto-app-loja/img/${item.foto}`,
+                  }}
+                  style={tela.imgProduto}
+                />
+                <Text>{item.nomeproduto}</Text>
+                <NumberFormat
+                  value={item.preco}
+                  displayType={"text"}
+                  thousandSeparator={true}
+                  prefix={"R$"}
+                  renderText={(formattedValue) => <Text>{formattedValue}</Text>}
+                />
               </View>
             )}
             keyExtractor={({ idproduto }, index) => idproduto}
@@ -51,8 +62,14 @@ export default function Inicial() {
   );
 }
 
-const estilos = StyleSheet.create({
-  imagem: {
+const tela = StyleSheet.create({
+  img: {
     width: "100%",
+  },
+  imgProduto: {
+    width: 200,
+    height: 200,
+    flex: 1,
+    resizeMode: "contain",
   },
 });
