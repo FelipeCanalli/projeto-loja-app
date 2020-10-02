@@ -1,10 +1,28 @@
 import * as React from "react";
 import { Text, View } from "../components/Themed";
 import { Image, StyleSheet, ActivityIndicator } from "react-native";
-import { ScrollView, FlatList } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import NumberFormat from "react-number-format"; // npm i react-number-format
+import DetalheProduto from "./DetalheProdutoScreen";
+import { createStackNavigator } from "@react-navigation/stack";
+import Navigation from "../navigation";
+
+const Stack = createStackNavigator();
 
 export default function Inicial() {
+  return (
+    <Stack.Navigator initialRouteName="Produtos">
+      <Stack.Screen name="Produtos" component={Produtos} />
+      <Stack.Screen name="DetalheProduto" component={DetalheProduto} />
+    </Stack.Navigator>
+  );
+}
+
+function Produtos({ navigation }) {
   const [carregado, setCarregado] = React.useState(true);
   const [dados, setDados] = React.useState([]);
 
@@ -52,6 +70,16 @@ export default function Inicial() {
                   prefix={"R$"}
                   renderText={(formattedValue) => <Text>{formattedValue}</Text>}
                 />
+
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("DetalheProduto", {
+                      idproduto: `${item.idproduto}`,
+                    });
+                  }}
+                >
+                  <Text style={tela.link}>Saiba mais</Text>
+                </TouchableOpacity>
               </View>
             )}
             keyExtractor={({ idproduto }, index) => idproduto}
@@ -71,5 +99,13 @@ const tela = StyleSheet.create({
     height: 200,
     flex: 1,
     resizeMode: "contain",
+  },
+  link: {
+    padding: 10,
+    margin: 10,
+    backgroundColor: "#7e57c2",
+    color: "white",
+    borderRadius: 5,
+    width: 100,
   },
 });
