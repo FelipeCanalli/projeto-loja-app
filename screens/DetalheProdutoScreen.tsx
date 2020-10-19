@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ActivityIndicator, Image, StyleSheet } from "react-native";
+import { ActivityIndicator, Alert, Image, StyleSheet } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import * as SQLite from "expo-sqlite";
@@ -55,9 +55,15 @@ export default function DetalheProduto({ route }) {
               <Text style={tela.titulo}>{item.nomeproduto}</Text>
               <Text style={tela.descricao}>{item.descricao}</Text>
               <Text style={tela.preco}>R${item.preco}</Text>
+
               <TouchableOpacity
                 onPress={() => {
-                  adicionarAoCarrinho(`${idproduto}`);
+                  adicionarAoCarrinho(
+                    `${idproduto}`,
+                    `${item.nomeproduto}`,
+                    `${item.preco}`,
+                    `${item.foto1}`
+                  );
                 }}
                 style={tela.link}
               >
@@ -92,16 +98,19 @@ const tela = StyleSheet.create({
 
 const db = SQLite.openDatabase("applojadb.banco");
 
-function adicionarAoCarrinho(id) {
-  alert("chamou o id do produto: " + id);
+function adicionarAoCarrinho(id, nome, preco, foto) {
+  Alert.alert(`${nome} ${id}`, "Produto adicionado com sucesso");
   db.transaction((tx) => {
     tx.executeSql(
-      "create table if not exists itens(id integer primary key,idproduto int);"
+      "create table if not exists itens(id integer primary key,idproduto int, nomeproduto text, preco text, foto text);"
     );
   });
 
   db.transaction((tx) => {
-    tx.executeSql("insert into itens(idproduto)values(?)", [id]);
+    tx.executeSql(
+      "insert into itens(idproduto,nomeproduto, preco,foto)values(?,?,?,?)",
+      [id, nome, preco, foto]
+    );
     tx.executeSql("select * from itens", [], (_, { rows }) => {
       console.log(JSON.stringify(rows));
     });
