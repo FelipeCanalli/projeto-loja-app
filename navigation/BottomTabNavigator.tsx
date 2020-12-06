@@ -13,6 +13,7 @@ import CadastrarScreen from "../screens/CadastrarScreen";
 import InicialScreen from "../screens/InicialScreen";
 import PerfilScreen from "../screens/PerfilScreen";
 import CarrinhoScreen from "../screens/CarrinhoScreen";
+import PagamentoScreen from "../screens/PagamentoScreen";
 import PedidosRealizadosScreen from "../screens/PedidosRealizadosScreen";
 
 import { BottomTabParamList } from "../types";
@@ -44,6 +45,14 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-cart" color={color} />
           ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="Pagamento"
+        component={PagamentoNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon2 name="cogs" color={color} />,
         }}
       />
 
@@ -136,6 +145,19 @@ function CarrinhoNavigator() {
         options={{ headerTitle: "Carrinho" }}
       />
     </CarrinhoStack.Navigator>
+  );
+}
+
+const PagamentoStack = createStackNavigator();
+function PagamentoNavigator() {
+  return (
+    <PagamentoStack.Navigator>
+      <PagamentoStack.Screen
+        name="PagamentoScreen"
+        component={PagamentoScreen}
+        options={{ headerTitle: "Pagamento" }}
+      />
+    </PagamentoStack.Navigator>
   );
 }
 

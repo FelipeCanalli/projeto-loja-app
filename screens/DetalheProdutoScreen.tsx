@@ -92,14 +92,16 @@ const tela = StyleSheet.create({
     borderRadius: 5,
     width: 160,
   },
+  titulo: {},
+  descricao: {},
+  preco: {},
 });
 
 // Fazer a constante do banco de dados. Vamos chamar de db
 
 const db = SQLite.openDatabase("applojadb.banco");
 
-function adicionarAoCarrinho(id, nome, preco, foto) {
-  Alert.alert(`${nome} ${id}`, "Produto adicionado com sucesso");
+function adicionarAoCarrinho(idproduto, nomeproduto, preco, foto1) {
   db.transaction((tx) => {
     tx.executeSql(
       "create table if not exists itens(id integer primary key,idproduto int, nomeproduto text, preco text, foto text);"
@@ -109,8 +111,11 @@ function adicionarAoCarrinho(id, nome, preco, foto) {
   db.transaction((tx) => {
     tx.executeSql(
       "insert into itens(idproduto,nomeproduto, preco,foto)values(?,?,?,?)",
-      [id, nome, preco, foto]
+      [idproduto, nomeproduto, preco, foto1]
     );
+
+    //tx.executeSql("drop table itens");
+
     tx.executeSql("select * from itens", [], (_, { rows }) => {
       console.log(JSON.stringify(rows));
     });

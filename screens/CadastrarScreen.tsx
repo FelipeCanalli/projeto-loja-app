@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native-gesture-handler";
-import { Picker, StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, Picker } from "react-native";
 
 // Váriaveis globais
-let ft = "padrao.jpg";
+let ft = "";
 let nome = "";
 let cpf = "";
 let sx = "";
@@ -25,16 +25,16 @@ let ba = "";
 let cep = "";
 
 export default function Cadastrar() {
-  const [foto, setFoto] = React.useState("");
+  const [foto, setFoto] = React.useState("padrao.jpg");
   const [nomecli, setNomecli] = React.useState("");
   const [cpfcli, setCPFcli] = React.useState("");
-  const [sexo, setSexo] = React.useState("");
+  const [sexo, setSexo] = React.useState("M");
   const [usuario, setUsuario] = React.useState("");
   const [senha, setSenha] = React.useState("");
   const [confirmar, setConfirmar] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [telefone, setTelefone] = React.useState("");
-  const [tipo, setTipo] = React.useState("");
+  const [tipo, setTipo] = React.useState("Rua");
   const [logradouro, setLogradouro] = React.useState("");
   const [numero, setNumero] = React.useState("");
   const [complemento, setComplemento] = React.useState("");
@@ -66,8 +66,8 @@ export default function Cadastrar() {
             onValueChange={setSexo}
             style={estilos.input}
           >
-            <Picker.Item label="Masculino" value="Masculino" />
-            <Picker.Item label="Feminino" value="Feminino" />
+            <Picker.Item label="Masculino" value="M" />
+            <Picker.Item label="Feminino" value="F" />
           </Picker>
         </View>
 
@@ -129,7 +129,7 @@ export default function Cadastrar() {
             style={estilos.input}
           >
             <Picker.Item label="Rua" value="Rua" />
-            <Picker.Item label="Avenida" value="Avenida" />
+            <Picker.Item label="Avenida" value="Av" />
             <Picker.Item label="Alameda" value="Alameda" />
             <Picker.Item label="Praça" value="Praça" />
           </Picker>
@@ -257,7 +257,7 @@ const estilos = StyleSheet.create({
 
 function efetuarCadastro() {
   // O fetch vai fazer uma captura/busca de dados de uma API
-  fetch("http://192.168.0.23/projeto-app-loja/service/cadastro/cadastrar.php", {
+  fetch("http://192.168.0.23/projeto-app-loja/service/cadastro/cadastro.php", {
     // Passando dados para a API com método POST
     method: "POST",
     // Passando cabeçalhos dizendo que ele tem que aceitar uma aplicação em JSON

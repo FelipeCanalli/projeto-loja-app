@@ -62,14 +62,8 @@ function Produtos({ navigation }) {
                   }}
                   style={tela.imgProduto}
                 />
-                <Text>{item.nomeproduto}</Text>
-                <NumberFormat
-                  value={item.preco}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  prefix={"R$"}
-                  renderText={(formattedValue) => <Text>{formattedValue}</Text>}
-                />
+                <Text> {item.nomeproduto}</Text>
+                <Text> R$ {item.preco.replace(".", ",")}</Text>
 
                 <TouchableOpacity
                   onPress={() => {

@@ -7,6 +7,10 @@ import { NavigationContainer } from "@react-navigation/native";
 // Reponsável pelo empilhamento de telas
 import { createStackNavigator } from "@react-navigation/stack";
 
+import * as SQLite from "expo-sqlite";
+
+const db = SQLite.openDatabase("applojadb.banco");
+
 const Stack = createStackNavigator();
 
 let us = "";
@@ -41,9 +45,13 @@ export default function Login({ navigation }: { navigation: any }) {
         <TouchableOpacity
           style={estilos.btnLogar}
           onPress={() => {
-            us = usuario;
-            sh = senha;
-            logar();
+            if (usuario == "" || senha == "") {
+              Alert.alert("Atenção", "Prencha os campos");
+            } else {
+              us = usuario;
+              sh = senha;
+              logar();
+            }
           }}
         >
           <Text style={estilos.txtLogar}>Entrar</Text>
@@ -162,8 +170,44 @@ function logar() {
     // Então, exiba a reposta no console
     .then((response) => response.json())
     .then((resposta) => {
-      console.log(resposta);
-      Alert.alert("Olhe o console");
+      gravarPerfil(resposta.saida[0]);
+      Alert.alert("Olhe na tela de console");
     })
     .catch((error) => console.error(error));
+}
+
+function gravarPerfil(dados) {
+  db.transaction((tx) => {
+    tx.executeSql(
+      "create table if not exists perfil(id integer primary key,idusuario int , nomeusuario text , foto text , idcli int , nomecli text, cpf text, sexo text, email text, telefone text, tipo text, logradouro text, numero text, complemento text, bairro text, cep text , logado);"
+    );
+  });
+
+  db.transaction((tx) => {
+    tx.executeSql(
+      "insert into perfil (idusuario , nomeusuario , foto , idcli , nomecli , cpf , sexo , email , telefone , tipo , logradouro , numero , complemento , bairro , cep , logado) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+      [
+        dados.idusuario,
+        dados.nomeusuario,
+        dados.foto,
+        dados.idcli,
+        dados.nomecli,
+        dados.cpf,
+        dados.sexo,
+        dados.email,
+        dados.telefone,
+        dados.tipo,
+        dados.logradouro,
+        dados.numero,
+        dados.complemento,
+        dados.bairro,
+        dados.cep,
+        1,
+      ]
+    );
+
+    tx.executeSql("select * from perfil", [], (_, { rows }) => {
+      console.log(JSON.stringify(rows));
+    });
+  });
 }
